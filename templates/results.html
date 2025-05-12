@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #E6F0FA; /* Pale blue */
+            font-family: Arial, sans-serif;
+        }
+        .result {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .btn-primary, .btn-secondary {
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #005566;
+        }
+        .btn-secondary:hover {
+            background-color: #4a4a4a;
+        }
+        .reward {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+        .reward-img {
+            max-width: 360px;
+            height: auto;
+            margin-top: 10px;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Quiz Results</h1>
+        <h3>Your Score: {{ score }} / {{ total }}</h3>
+        {% if score == total %}
+            <div class="reward">
+                <h2>Congratulations! You’re an HKU Heritage Expert!</h2>
+                <p>You answered all {{ total }} questions correctly!</p>
+                <img src="/static/trophy.jpg" alt="Trophy for perfect quiz score" class="reward-img">
+            </div>
+        {% endif %}
+        <p>Review your answers below:</p>
+        {% for result in results %}
+            <div class="result">
+                <p><strong>Question {{ loop.index }}: {{ result.question }}</strong></p>
+                <p>Your Answer: {{ result.user_answer }} <span class="{{ 'correct' if result.is_correct else 'incorrect' }}">({{ 'Correct' if result.is_correct else 'Incorrect' }})</span></p>
+                {% if not result.is_correct %}
+                    <p>Correct Answer: {{ result.correct_answer }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <a href="/quiz" class="btn btn-primary mt-3">Retake Quiz</a>
+        <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
